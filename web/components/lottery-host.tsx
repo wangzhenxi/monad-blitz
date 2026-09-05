@@ -101,7 +101,10 @@ export function LotteryHost() {
     }
   }, [account, participant, expiry, keyMatches, issuerOnChain, addr]);
 
-  const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin;
+  // 预渲染无 window：仅浏览器取 origin（qrValue 仅在客户端签名后非空，无 hydration 风险）
+  const APP_URL =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    (typeof window !== "undefined" ? window.location.origin : "");
   const qrValue = issued
     ? `${APP_URL}/gather?addr=${addr}&sig=${issued.sig}`
     : "";
