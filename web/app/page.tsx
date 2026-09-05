@@ -1,8 +1,7 @@
 "use client";
 
-import { useAccount } from "wagmi";
 import { formatEther } from "viem";
-import { useReadContract } from "wagmi";
+import { useConnection, useReadContract } from "wagmi";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,7 +13,7 @@ import { RecentMints } from "@/components/recent-mints";
 import { abi, CONTRACT_ADDRESS, EXPLORER_URL } from "@/lib/contract";
 
 export default function Home() {
-  const { isConnected } = useAccount();
+  const { isConnected } = useConnection();
 
   const { data: totalSupply } = useReadContract({
     address: CONTRACT_ADDRESS,
@@ -68,15 +67,14 @@ export default function Home() {
               <div className="text-sm text-muted-foreground">Price</div>
             </div>
             <Separator orientation="vertical" className="h-10" />
-            <Button variant="outline" asChild>
-              <a
-                href={`${EXPLORER_URL}/token/${CONTRACT_ADDRESS}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                View on Monadscan
-              </a>
-            </Button>
+            <a
+              className={buttonVariants({ variant: "outline" })}
+              href={`${EXPLORER_URL}/token/${CONTRACT_ADDRESS}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View on Monadscan
+            </a>
           </CardContent>
         </Card>
 

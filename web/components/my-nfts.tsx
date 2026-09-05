@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { PublicClient } from "viem";
-import { useAccount, usePublicClient } from "wagmi";
+import { useConnection, usePublicClient } from "wagmi";
 import { monadTestnet } from "wagmi/chains";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,7 @@ type NftItem = {
 const MAX_TOKENS_TO_SCAN = 200;
 
 export function MyNfts({ isConnected }: { isConnected: boolean }) {
-  const { address } = useAccount();
+  const { address } = useConnection();
   const publicClient = usePublicClient({ chainId: monadTestnet.id });
   const [items, setItems] = useState<NftItem[]>([]);
   const [loading, setLoading] = useState(false);

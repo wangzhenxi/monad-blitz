@@ -8,6 +8,7 @@ node_modules/
 web/.next/
 web/out/
 web/.env*
+!web/.env.example
 next-env.d.ts
 
 # Env & secrets

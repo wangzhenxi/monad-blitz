@@ -1,7 +1,7 @@
 "use client";
 
 import { monadTestnet } from "wagmi/chains";
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { useConnect, useConnection, useDisconnect, useSwitchChain } from "wagmi";
 import { Button } from "@/components/ui/button";
 
 export function shortAddress(address: string) {
@@ -9,7 +9,7 @@ export function shortAddress(address: string) {
 }
 
 export function ConnectWallet() {
-  const { address, chainId, isConnected } = useAccount();
+  const { address, chainId, isConnected } = useConnection();
   const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChain } = useSwitchChain();
