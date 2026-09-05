@@ -223,7 +223,7 @@ export function LotteryGather() {
   if (!addr) {
     return (
       <div className="flex flex-col flex-1 min-h-screen">
-        <AppNav title="集熵现场" right={<ConnectWallet />} />
+        <AppNav right={<ConnectWallet />} />
         <main className="mx-auto w-full max-w-md flex-1 px-6 py-8 flex flex-col gap-6">
           <Card>
             <CardContent className="py-4 flex flex-col gap-3 text-sm">
@@ -243,7 +243,7 @@ export function LotteryGather() {
 
   return (
     <div className="flex flex-col flex-1 min-h-screen">
-      <AppNav title="集熵现场" right={<ConnectWallet />} />
+      <AppNav right={<ConnectWallet />} />
 
       <main className="mx-auto w-full max-w-md flex-1 px-6 py-8 flex flex-col gap-6">
         {/* 熵根展示 */}

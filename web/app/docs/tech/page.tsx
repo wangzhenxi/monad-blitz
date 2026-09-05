@@ -13,7 +13,7 @@ function H({ children }: { children: React.ReactNode }) {
 export default function TechDocPage() {
   return (
     <div className="flex flex-col flex-1 min-h-screen">
-      <AppNav title="技术方案" />
+      <AppNav />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8 flex flex-col gap-2">
         <Card>

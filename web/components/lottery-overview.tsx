@@ -80,7 +80,7 @@ export function LotteryOverview() {
 
   return (
     <div className="flex flex-col flex-1 min-h-screen">
-      <AppNav title="Monad Blitz" right={<ConnectWallet />} />
+      <AppNav right={<ConnectWallet />} />
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-8 flex flex-col gap-6">
         {/* ---------- Hero ---------- */}

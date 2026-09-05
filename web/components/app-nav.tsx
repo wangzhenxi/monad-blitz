@@ -18,15 +18,15 @@ const TABS: { href: string; label: string; withAddr?: boolean }[] = [
 ];
 
 /// 全站统一顶部导航：所有页面入口 + GitHub 外链。
-/// 页面标题由各页传入（与 tab 名保持一致），右侧可放钱包连接等。
-export function AppNav({ title, right }: { title: string; right?: ReactNode }) {
+/// 左上角固定站点名，不随页面切换变化；右侧可放钱包连接等。
+export function AppNav({ right }: { right?: ReactNode }) {
   const pathname = usePathname();
   const addr = useLotteryAddr();
 
   return (
     <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-6 py-3 border-b">
       <div className="flex items-center gap-3 flex-wrap">
-        <span className="text-lg font-bold">{title}</span>
+        <a href="/" className="text-lg font-bold shrink-0">Monad Blitz</a>
         <nav className="flex gap-3 text-sm text-muted-foreground flex-wrap">
           {TABS.map((t) => {
             const active = pathname === t.href;

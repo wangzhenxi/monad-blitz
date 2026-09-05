@@ -110,7 +110,7 @@ export function LotteryHost() {
   if (!addr) {
     return (
       <div className="flex flex-col flex-1 min-h-screen">
-        <AppNav title="签发工具" right={<Badge variant="secondary">私钥仅存浏览器内存，关页即焚</Badge>} />
+        <AppNav right={<Badge variant="secondary">私钥仅存浏览器内存，关页即焚</Badge>} />
         <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-8 flex flex-col gap-6">
           <Card>
             <CardContent className="py-4 flex flex-col gap-3 text-sm">
@@ -130,7 +130,7 @@ export function LotteryHost() {
 
   return (
     <div className="flex flex-col flex-1 min-h-screen">
-      <AppNav title="签发工具" right={<Badge variant="secondary">私钥仅存浏览器内存，关页即焚</Badge>} />
+      <AppNav right={<Badge variant="secondary">私钥仅存浏览器内存，关页即焚</Badge>} />
 
       <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-8 flex flex-col gap-6">
         <Card>
