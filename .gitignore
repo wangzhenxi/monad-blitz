@@ -1,0 +1,22 @@
+# Foundry
+contracts/cache/
+contracts/out/
+contracts/lib/
+
+# Node
+node_modules/
+web/.next/
+web/out/
+web/.env*
+next-env.d.ts
+
+# Env & secrets
+.env
+.env.local
+.env.*.local
+
+# Tool state
+.trae/
+
+# OS
+.DS_Store
