@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Monad Blitz NFT",
+  title: "Monad Blitz — 链上可信抽奖平台",
   description:
-    "Fixed-price public NFT mint on Monad testnet — instant receipts via eth_sendRawTransactionSync.",
+    "押金托管 + Pyth Entropy 可验证随机数的链上抽奖：名单可验证、开奖不可操纵、派奖由合约执行。",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
