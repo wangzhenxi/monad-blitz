@@ -10,8 +10,8 @@ const GITHUB_URL = "https://github.com/wangzhenxi/monad-blitz";
 const TABS: { href: string; label: string; withAddr?: boolean }[] = [
   { href: "/", label: "首页" },
   { href: "/play", label: "活动", withAddr: true },
-  { href: "/gather", label: "集熵现场", withAddr: true },
-  { href: "/host", label: "签发工具", withAddr: true },
+  { href: "/gather", label: "抽奖现场", withAddr: true },
+  { href: "/host", label: "入场管理", withAddr: true },
   { href: "/create", label: "创建活动" },
   { href: "/docs/product", label: "产品设计" },
   { href: "/docs/tech", label: "技术方案" },

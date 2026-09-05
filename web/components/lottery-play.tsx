@@ -19,11 +19,19 @@ import {
   lotteryAbi,
   formatMON,
   formatCountdown,
+  formatTs,
   shortAddress,
   STATUS_LABEL,
   errMsg,
 } from "@/lib/lottery";
-import { useIdentity, useLotteryAddr, useLotterySnapshot, useNow } from "@/lib/lottery-hooks";
+import {
+  useDeployInfo,
+  useIdentity,
+  useLotteryAddr,
+  useLotterySnapshot,
+  useNow,
+  useRegisterTimes,
+} from "@/lib/lottery-hooks";
 
 const STATUS = { Open: 0, Drawing: 1, Drawn: 2 } as const;
 
@@ -123,6 +131,13 @@ export function LotteryPlay() {
 
   // 无活动上下文（缺 ?addr=）：明确提示，不回落到任意合约（须在全部 hooks 之后早退）
   const registeredList = useParticipants(addr, snap?.participantsLength);
+  // 参与时间：注册事件的区块时间戳（依赖部署块，从部署块起扫描 Registered 事件）
+  const deployInfo = useDeployInfo(addr);
+  const regTimes = useRegisterTimes(
+    addr,
+    deployInfo?.block,
+    snap ? Number(snap.participantsLength) : undefined,
+  );
   if (!addr) {
     return (
       <div className="flex flex-col flex-1 min-h-screen">
@@ -351,11 +366,15 @@ export function LotteryPlay() {
             {registeredList.length === 0 && (
               <span className="text-sm text-muted-foreground">暂无参与者</span>
             )}
-            {registeredList.map((p, i) => (
-              <Badge key={p} variant="outline">
-                {i + 1}. {shortAddress(p)}
-              </Badge>
-            ))}
+            {registeredList.map((p, i) => {
+              const t = regTimes[p.toLowerCase()];
+              return (
+                <Badge key={p} variant="outline">
+                  {i + 1}. {shortAddress(p)}
+                  <span className="ml-1 text-muted-foreground">{t ? formatTs(t) : "…"}</span>
+                </Badge>
+              );
+            })}
           </CardContent>
         </Card>
       </main>

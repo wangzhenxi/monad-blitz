@@ -93,7 +93,7 @@
 ## 4. 随机数设计
 
 - 服务：**Pyth Entropy**（Monad testnet，V2 接口）。
-  > ✅ 勘误更新（2026-09-05 实测确认）：真实入口为 ERC-1967 代理 `0x825C0390f379C631F3CF11a82a37d20bddf93C07`（默认 provider `0x6CC1...6344`，请求费实测 0.128 MON，回调 `entropyCallback`）；原文地址 `0x3682...e320` 已证伪（仅治理函数），回调名 `providerConfirmedRandomNumber` 系笔误。详见 [tech-design.md §4](./tech-design.md)。
+  > ✅ 勘误更新（2026-09-05 实测确认）：真实入口为 ERC-1967 代理 `0x825c0390f379C631f3Cf11A82a37D20BddF93c07`（默认 provider `0x6CC1...6344`，请求费实测 0.128 MON，回调 `entropyCallback`）；原文地址 `0x3682...e320` 已证伪（仅治理函数），回调名 `providerConfirmedRandomNumber` 系笔误。详见 [tech-design.md §4](./tech-design.md)。
 - 流程：`draw(userSeed)` → 合约调用 Entropy `requestV2`（附带 userSeed，缴纳请求费）→ Pyth 验证者回调 `entropyCallback` → 合约以随机数为种子对名单做部分洗牌（Fisher-Yates），取前 N 名为中奖者。
 - 公平性：随机数 = 验证者熵 + 用户种子共同决定，任何单方（项目方、验证者、观众）都无法独立操纵结果，且过程链上可审计；洗牌确定性可复现，任何人可按同一随机数在链下重算中奖名单核验。
 - 请求费：触发者垫付，开奖成功后从奖池中返还（金额极小）；**奖池不足时跳过返还（触发者自担）**——回调永不 revert，保证开奖不因退款卡死。

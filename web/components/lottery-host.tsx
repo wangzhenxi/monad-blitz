@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { privateKeyToAccount } from "viem/accounts";
-import { keccak256, concat, toHex, hexToBytes } from "viem";
+import { keccak256, concat, toHex } from "viem";
 import { QRCodeSVG } from "qrcode.react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,13 +14,17 @@ import { AppNav } from "@/components/app-nav";
 import { useLotteryAddr, useLotterySnapshot } from "@/lib/lottery-hooks";
 
 /// 签名 digest：keccak256(abi.encodePacked(participant, lottery, expiry))
+/// 注意：viem concat 不允许混传 hex 字符串与 Uint8Array（首参为字符串走 concatHex 会对
+/// 所有参数调 .replace；首参为字节走 concatBytes 会把字符串按字符逐个写入）——
+/// 统一传 hex 字符串，地址 42 字符去 0x 前缀后即 20 字节，与 encodePacked 不 pad 语义一致
 function buildDigest(participant: `0x${string}`, lottery: `0x${string}`, expiry: bigint) {
-  const packed = concat([
-    hexToBytes(participant), // address 20 字节（encodePacked 不 pad）
-    hexToBytes(lottery),
-    toHex(expiry, { size: 32 }),
-  ]);
-  return keccak256(packed);
+  return keccak256(
+    concat([
+      participant.toLowerCase() as `0x${string}`,
+      lottery.toLowerCase() as `0x${string}`,
+      toHex(expiry, { size: 32 }),
+    ]),
+  );
 }
 
 export function LotteryHost() {
@@ -94,7 +98,9 @@ export function LotteryHost() {
         message: { raw: digest },
       })) as `0x${string}`;
       // 合约期望 sig = abi.encodePacked(uint256(expiry), ecdsa(65))
-      const sig = concat([toHex(BigInt(expiryNum), { size: 32 }), hexToBytes(signature)]) as `0x${string}`;
+      // 注意：viem concat 对首参为字符串时走 concatHex，会对所有参数调 .replace——
+      // 故此处统一传 hex 字符串（混传 Uint8Array 会抛 x.replace is not a function）
+      const sig = concat([toHex(BigInt(expiryNum), { size: 32 }), signature]) as `0x${string}`;
       setIssued({ participant: participant.trim(), sig, expiry: expiryNum });
     } catch (e) {
       setError(`签名失败：${(e as Error).message}`);
@@ -202,7 +208,7 @@ export function LotteryHost() {
                 <QRCodeSVG value={qrValue} size={220} />
               </div>
               <div className="text-sm text-muted-foreground text-center">
-                参与者扫码 → 打开集熵页 → 连接钱包 → 凭此签名注册（押金托管）
+                参与者扫码 → 打开抽奖现场页 → 连接钱包 → 凭此签名注册（押金托管）
               </div>
               <div className="text-xs text-muted-foreground break-all max-w-lg">
                 签名（97 字节）：<span className="font-mono">{issued.sig}</span>

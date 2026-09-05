@@ -172,7 +172,7 @@ export const entropyAbi = [
 
 export const ENTROPY_ADDRESS =
   (process.env.NEXT_PUBLIC_ENTROPY_ADDRESS as Address | undefined) ??
-  "0x825C0390f379C631F3CF11a82a37d20bddf93C07";
+  "0x825c0390f379C631f3Cf11A82a37D20BddF93c07";
 export const ENTROPY_PROVIDER =
   (process.env.NEXT_PUBLIC_ENTROPY_PROVIDER as Address | undefined) ??
   "0x6CC14824Ea2918f5De5C2f75A9Da968ad4BD6344";
@@ -207,6 +207,19 @@ export function formatCountdown(seconds: number) {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+/// 时间戳展示（秒）：当天只显 HH:mm，跨天补日期 MM-DD HH:mm（仅客户端异步数据使用，无 SSR 水合问题）
+export function formatTs(ts: number) {
+  const d = new Date(ts * 1000);
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const hm = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const now = new Date();
+  const sameDay =
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate();
+  return sameDay ? hm : `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${hm}`;
 }
 
 /// viem/wagmi 错误信息提取（shortMessage 优先）

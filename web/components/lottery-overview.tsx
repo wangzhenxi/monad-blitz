@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConnectWallet } from "@/components/connect-wallet";
 import { AppNav } from "@/components/app-nav";
-import { FACTORY_ADDRESS, STATUS_LABEL, factoryAbi, formatMON, lotteryAbi, shortAddress } from "@/lib/lottery";
+import { FACTORY_ADDRESS, STATUS_LABEL, factoryAbi, formatMON, formatTs, lotteryAbi, shortAddress } from "@/lib/lottery";
+import { useDeployInfo } from "@/lib/lottery-hooks";
 
 interface ActivityStat {
   addr: Address;
@@ -123,6 +124,12 @@ export function LotteryOverview() {
             {!listLoading && activityList.length === 0 && (
               <span className="text-sm text-muted-foreground">暂无活动，点击上方"创建活动"开始第一场</span>
             )}
+            {stats.length > 0 && (
+              <div className="flex items-center justify-between gap-2 border-b pb-2 text-xs font-medium text-muted-foreground">
+                <span>合约地址 · 状态 · 人数/集熵条数/奖池/创建时间</span>
+                <span>入口</span>
+              </div>
+            )}
             {stats.map((s) => (
               <ActivityRow key={s.addr} stat={s} />
             ))}
@@ -150,6 +157,7 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
 }
 
 function ActivityRow({ stat }: { stat: ActivityStat }) {
+  const created = useDeployInfo(stat.addr); // 创建时间：部署块时间戳（首次访问二分查找，之后走缓存）
   const statusBadge =
     stat.status === 0
       ? "bg-green-100 text-green-800"
@@ -167,7 +175,8 @@ function ActivityRow({ stat }: { stat: ActivityStat }) {
           </span>
           <span className="text-xs text-muted-foreground">
             {stat.participants.toString()} 人 · 集熵 {stat.entropyCount.toString()} 条 ·{" "}
-            奖池 {stat.prizePool !== undefined ? formatMON(stat.prizePool) : "…"} MON
+            奖池 {stat.prizePool !== undefined ? formatMON(stat.prizePool) : "…"} MON · 创建{" "}
+            {created ? formatTs(created.time) : "…"}
           </span>
         </div>
       </div>
@@ -176,7 +185,7 @@ function ActivityRow({ stat }: { stat: ActivityStat }) {
           className="text-sm underline text-muted-foreground hover:text-foreground"
           href={`/gather?addr=${stat.addr}`}
         >
-          集熵现场
+          抽奖现场
         </a>
         <a
           className="text-sm underline font-medium hover:underline"

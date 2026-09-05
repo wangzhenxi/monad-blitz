@@ -102,7 +102,7 @@ Drawn:   claimDeposit() / claimPrize()；fundPrizePool() 拒绝`}</pre>
             <table className="w-full text-sm">
               <tbody>
                 {[
-                  ["入口（ERC-1967 代理）", "0x825C0390f379C631F3CF11a82a37d20bddf93C07"],
+                  ["入口（ERC-1967 代理）", "0x825c0390f379C631f3Cf11A82a37D20BddF93c07"],
                   ["默认 provider", "0x6CC14824Ea2918f5De5C2f75A9Da968ad4BD6344"],
                   ["接口代际", "V2（getFeeV2 / requestV2）"],
                   ["请求费实测", "≈ 0.128 MON（动态值，draw 时附 5% buffer）"],
@@ -138,7 +138,7 @@ Drawn:   claimDeposit() / claimPrize()；fundPrizePool() 拒绝`}</pre>
         <Card>
           <CardContent className="py-4 text-sm flex flex-col gap-2">
             <ul className="list-disc pl-5 flex flex-col gap-1">
-              <li><b>6 个入口页</b>：首页（全流程单页）/ 集熵现场（摇一摇产熵 + 实时熵流）/ 签发工具（本地签名 + 二维码）/ 创建活动（经工厂合约部署 + 链上活动列表）/ 产品设计 / 技术方案</li>
+              <li><b>6 个入口页</b>：首页（全流程单页）/ 抽奖现场（摇一摇产熵 + 实时熵流）/ 入场管理（本地签名 + 二维码）/ 创建活动（经工厂合约部署 + 链上活动列表）/ 产品设计 / 技术方案</li>
               <li>活动上下文：URL ?addr= 优先，回落 NEXT_PUBLIC_LOTTERY_ADDRESS</li>
               <li>Monad 适配：eth_getLogs 100 块限制 → 集熵历史 95 块分块扫描 + localStorage 增量缓存；活动列表走工厂合约 view 读取（无事件扫描）</li>
               <li>钱包：injected（桌面）+ WalletConnect（现场观众手机扫码）</li>

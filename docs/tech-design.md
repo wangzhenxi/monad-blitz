@@ -187,7 +187,7 @@ require(block.timestamp <= expiry, "expired");
 
 已验证事实（2026-09-05 链上实测，详见 §4）：
 
-- 入口（ERC-1967 代理）：`0x825C0390f379C631F3CF11a82a37d20bddf93C07`
+- 入口（ERC-1967 代理）：`0x825c0390f379C631f3Cf11A82a37D20BddF93c07`
 - 实现合约：`0xdf21D137Aadc95588205586636710ca2890538d5`（Pyth 官方跨链标准实现）
 - 接口代际：**V2**（`getFeeV2`/`requestV2` 全系选择器在位）
 - 默认 provider：`0x6CC14824Ea2918f5De5C2f75A9Da968ad4BD6344`（`getDefaultProvider()` 链上确认）
@@ -274,7 +274,7 @@ prizePoolAvailable() = prizePoolReceived - feesRefunded - prizesPaidOut
 
 | 项 | 值 | 验证方式 |
 |---|---|---|
-| 入口地址（ERC-1967 代理） | `0x825C0390f379C631F3CF11a82a37d20bddf93C07` | 用户提供 + 链上实测 |
+| 入口地址（ERC-1967 代理） | `0x825c0390f379C631f3Cf11A82a37D20BddF93c07` | 用户提供 + 链上实测 |
 | 实现合约 | `0xdf21D137Aadc95588205586636710ca2890538d5` | EIP-1967 impl slot 读取；与 Pyth 官方文档示例（Optimism）同地址，跨链标准实现 |
 | 接口代际 | **V2**（`getFeeV2`/`requestV2` 全系在位；V1 `requestWithCallback` 兼容并存） | impl bytecode 选择器匹配 + 代理 `eth_call getFeeV2()` 成功 |
 | 默认 provider | `0x6CC14824Ea2918f5De5C2f75A9Da968ad4BD6344` | 代理 `getDefaultProvider()` 调用 |
@@ -322,7 +322,7 @@ prizePoolAvailable() = prizePoolReceived - feesRefunded - prizesPaidOut
 # contracts/.env
 MONAD_TESTNET_RPC=https://testnet-rpc.monad.xyz
 DEPLOYER_KEY=...
-ENTROPY_ADDRESS=0x825C0390f379C631F3CF11a82a37d20bddf93C07
+ENTROPY_ADDRESS=0x825c0390f379C631f3Cf11A82a37D20BddF93c07
 ENTROPY_PROVIDER=0x6CC14824Ea2918f5De5C2f75A9Da968ad4BD6344
 ISSUER_ADDRESS=0x          # 线上模式部署：留空传 address(0)；线下演示：工作人员临时密钥
 ```

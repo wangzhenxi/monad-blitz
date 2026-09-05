@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConnectWallet, shortAddress } from "@/components/connect-wallet";
 import { AppNav } from "@/components/app-nav";
-import { lotteryAbi, errMsg } from "@/lib/lottery";
+import { lotteryAbi, errMsg, formatTs } from "@/lib/lottery";
 import { useIdentity, useLotteryAddr, useLotterySnapshot, useNow } from "@/lib/lottery-hooks";
 
 interface EntropyItem {
@@ -31,6 +31,7 @@ export function LotteryGather() {
   const [txMsg, setTxMsg] = useState<string | null>(null);
   const [shakeSupported, setShakeSupported] = useState(false);
   const [manualSeed, setManualSeed] = useState("");
+  const [manualErr, setManualErr] = useState<string | null>(null);
   const listeners = useRef<(() => void)[]>([]); // [windows shake cleanup]
 
   const loadHistory = useCallback(async () => {
@@ -281,10 +282,18 @@ export function LotteryGather() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base">提交你的熵</CardTitle>
+              <div className="text-xs text-muted-foreground">
+                同一人可多次提交：每条熵都会按提交顺序链式累积进熵根（新根 =
+                keccak(旧根 ‖ 新熵)），开奖以最终熵根为种子。多次提交不增加中奖概率——中奖按注册名单洗牌抽取，一人一票。
+              </div>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
               {!id.registered && (
-                <div className="text-sm text-muted-foreground">仅限已注册参与者</div>
+                <div className="text-sm text-muted-foreground">
+                  {snap && now >= Number(snap.drawTime)
+                    ? `本活动已于 ${formatTs(Number(snap.drawTime))} 过开奖时间，注册与提熵均已截止`
+                    : "仅限已注册参与者"}
+                </div>
               )}
               {id.registered && (
                 <>
@@ -306,22 +315,37 @@ export function LotteryGather() {
                       🎲 随机生成
                     </Button>
                   </div>
-                  <div className="flex gap-2">
-                    <input
-                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-                      placeholder="或手动输入熵（0x…64位hex）"
-                      value={manualSeed}
-                      onChange={(e) => setManualSeed(e.target.value)}
-                    />
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        const v = manualSeed.trim() as `0x${string}`;
-                        if (/^0x[0-9a-fA-F]{64}$/.test(v)) setMyEntropy(v);
-                      }}
-                    >
-                      采用
-                    </Button>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
+                      <input
+                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+                        placeholder="或手动输入熵（0x…64位hex）"
+                        value={manualSeed}
+                        onChange={(e) => {
+                          setManualSeed(e.target.value);
+                          setManualErr(null);
+                        }}
+                      />
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          const v = manualSeed.trim() as `0x${string}`;
+                          if (/^0x[0-9a-fA-F]{64}$/.test(v)) {
+                            setMyEntropy(v);
+                            setManualErr(null);
+                          } else {
+                            setManualErr(
+                              "格式错误：熵须为 0x 开头的 64 位十六进制字符（32 字节），当前不会被采用",
+                            );
+                          }
+                        }}
+                      >
+                        采用
+                      </Button>
+                    </div>
+                    {manualErr && (
+                      <div className="text-xs text-destructive break-all">{manualErr}</div>
+                    )}
                   </div>
                   <Button disabled={!myEntropy || isPending} onClick={() => myEntropy && submit(myEntropy)}>
                     {isPending ? "提交中…" : "提交熵上链"}
@@ -338,6 +362,11 @@ export function LotteryGather() {
             <CardTitle className="text-base">现场熵流（{items.length}）</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2 max-h-96 overflow-auto">
+            {items.length > 0 && (
+              <div className="sticky top-0 bg-card border-b pb-2 text-xs font-medium text-muted-foreground">
+                序号 · 参与者 · 熵值（前 18 位）
+              </div>
+            )}
             {items.length === 0 && (
               <span className="text-sm text-muted-foreground">暂无提交，等你的第一条熵</span>
             )}
